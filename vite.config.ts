@@ -8,7 +8,7 @@ export default defineConfig({
     plugins: [
 		vue(),
         semi({
-            theme: "@semi-bot/semi-theme-universedesign"
+            theme: "@semi-bot/semi-theme-feishu-dashboard"
         })
     ],
 	resolve: {
