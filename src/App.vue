@@ -62,7 +62,7 @@ const saveConfig = () => {
 		<LocaleProvider :locale="locale">
 			<div class="dashboard-extension-container">
 				<div
-					class="dashboard-extension-preview"
+					class="dashboard-extension-preview semi-light-scrollbar"
 					:style="{ width: canConfig ? 'calc(100% - 340px)' : '100%' }"
 				>
 					<npsChart :config="chartConfig" />
@@ -112,6 +112,7 @@ body {
 .dashboard-extension-preview {
 	position: relative;
 	width: calc(100% - 340px);
+	overflow-y: auto;
 }
 .dashboard-extension-config {
 	border-left: 1px solid #5f5f5f;

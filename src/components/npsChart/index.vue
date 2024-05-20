@@ -6,7 +6,7 @@ import { NPSRole, CustomConfig } from "@/types"
 import { useNPSChart, NPSDataItem } from "./useNPSChart"
 import { getRole, getInitRoleRange } from "@/utils"
 import { Table, Row, Col } from "@kousum/semi-ui-vue"
-import { ref, computed } from "vue"
+import { computed } from "vue"
 
 const props = defineProps<{
 	config?: IConfig
@@ -114,7 +114,7 @@ const tableData = computed(() => {
 				:span="24"
 				align="center"
 			>
-				<div style="min-height: 200px; max-height: 300px">
+				<div style="min-height: 200px; max-height: 300px;position: relative;">
 					<div id="nps-chart"></div>
 				</div>
 			</Col>
