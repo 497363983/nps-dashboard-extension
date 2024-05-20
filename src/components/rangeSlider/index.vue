@@ -81,7 +81,6 @@ const onMouseUp = (e: MouseEvent) => {
 		:tipFormatter="null"
 		:showMarkLabel="false"
 		@MouseUp="onMouseUp"
-		@change="(v) => console.log('change range', v)"
 		range
 	/>
 	<div style="position: relative">
