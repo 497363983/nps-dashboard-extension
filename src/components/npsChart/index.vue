@@ -83,9 +83,23 @@ const columns = () => {
 }
 const tableData = computed(() => {
 	const total = data.value.reduce((acc, cur) => acc + cur.num, 0)
+	const roleRange = props.config?.customConfig?.roleRange
+		? (props.config.customConfig.roleRange as [number, number])
+		: getInitRoleRange(3)
+	const scoreRange = props.config?.customConfig?.scoreRange
+		? (props.config.customConfig.scoreRange as [number, number])
+		: [1, 3]
+	const threshold = {
+		[NPSRole.Detractor]: [scoreRange?.[0], roleRange?.[0] - scoreRange?.[0]],
+		[NPSRole.Passive]: [
+			roleRange?.[0] - scoreRange?.[0],
+			roleRange?.[1] - scoreRange?.[0],
+		],
+		[NPSRole.Promoter]: [roleRange?.[1] - scoreRange?.[0] + 1, scoreRange?.[1]],
+	}
 	return data.value.map((item) => {
 		return {
-			Options: item.role,
+			Options: `${item.role}（${threshold[item.type]?.[0] === threshold[item.type]?.[1] ? "" : threshold[item.type]?.[0] + "-"}${threshold[item.type]?.[1]}${t("table.score")}）`,
 			Number: item.num,
 			Percent: `${((item.num / total) * 100).toFixed(2)}%`,
 		}
@@ -100,7 +114,7 @@ const tableData = computed(() => {
 				:span="24"
 				align="center"
 			>
-				<div style="min-height: 200px;max-height: 300px;">
+				<div style="min-height: 200px; max-height: 300px">
 					<div id="nps-chart"></div>
 				</div>
 			</Col>

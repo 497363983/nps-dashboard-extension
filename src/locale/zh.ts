@@ -26,5 +26,6 @@ export const zh = {
 		"options": "选项",
 		"number": "选择数",
 		"percent": "占比",
+		"score": "分"
 	}
 }
