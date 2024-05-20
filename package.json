@@ -1,0 +1,44 @@
+{
+  "name": "nps-dashboard-extension",
+  "description": "A dashboard extension of Base in FeiShu",
+  "version": "1.0.0-alpha",
+  "type": "module",
+  "dependencies": {
+    "@kousum/semi-ui-vue": "^0.11.0",
+    "@lark-base-open/js-sdk": "https://lf3-static.bytednsdoc.com/obj/eden-cn/jjjpceh7nulojvhj/@lark-base-open-js-sdk-0.4.0-alpha.12.tgz",
+    "@semi-bot/semi-theme-universedesign": "^1.0.13",
+    "@visactor/vchart": "^1.11.0",
+    "@visactor/vchart-semi-theme": "^1.11.0",
+    "@vueuse/core": "^10.9.0",
+    "vue": "^3.4.27",
+    "vue-i18n": "^9.13.1"
+  },
+  "devDependencies": {
+    "@kousum/vite-plugin-semi-theme": "^0.10.0",
+    "@types/node": "^20.12.12",
+    "@vitejs/plugin-vue": "^5.0.4",
+    "prettier": "^3.2.5",
+    "typescript": "^5.4.5",
+    "vite": "^5.2.11",
+    "vitest": "^1.6.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "vite --mode dev"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/497363983/nps-dashboard-extension.git"
+  },
+  "keywords": [
+    "Dashboard",
+    "Extension",
+    "Base"
+  ],
+  "author": "qww",
+  "license": "GNU",
+  "bugs": {
+    "url": "https://github.com/497363983/nps-dashboard-extension/issues"
+  },
+  "homepage": "https://github.com/497363983/nps-dashboard-extension#readme"
+}
