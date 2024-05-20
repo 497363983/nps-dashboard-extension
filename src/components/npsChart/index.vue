@@ -89,10 +89,11 @@ const tableData = computed(() => {
 	const scoreRange = props.config?.customConfig?.scoreRange
 		? (props.config.customConfig.scoreRange as [number, number])
 		: [1, 3]
+	console.log("roleRange", roleRange, "scoreRange", scoreRange)
 	const threshold = {
-		[NPSRole.Detractor]: [scoreRange?.[0], roleRange?.[0] - scoreRange?.[0]],
+		[NPSRole.Detractor]: [scoreRange?.[0], roleRange?.[0] - (scoreRange?.[0] === 1 ? 0 : 1)],
 		[NPSRole.Passive]: [
-			roleRange?.[0] - scoreRange?.[0],
+			roleRange?.[0] - - (scoreRange?.[0] === 1 ? 0 : 1),
 			roleRange?.[1] - scoreRange?.[0],
 		],
 		[NPSRole.Promoter]: [roleRange?.[1] - scoreRange?.[0] + 1, scoreRange?.[1]],
