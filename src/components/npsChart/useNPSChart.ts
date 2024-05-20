@@ -1,8 +1,9 @@
-import { IGaugeChartSpec, ICommonChartSpec } from "@visactor/vchart"
+import { ICommonChartSpec } from "@visactor/vchart"
 import VChart from "@visactor/vchart"
 import { MaybeRefOrGetter, toValue, shallowRef, watch } from "vue"
 import { NPSRole } from "@/types"
 import { tryOnMounted, tryOnUnMounted } from "@/utils"
+import { bitable } from "@lark-base-open/js-sdk"
 
 
 export interface NPSDataItem {
@@ -207,6 +208,7 @@ export function useNPSChart(
 			if (!chart.value) return
 			chart.value.updateSpec(getSpec(data))
 			chart.value.renderSync()
+			bitable.dashboard.setRendered()
 		},
 		{ immediate: true, deep: true }
 	)
@@ -216,6 +218,7 @@ export function useNPSChart(
 			dom: domItem ?? dom
 		})
 		chart.value.renderSync()
+		bitable.dashboard.setRendered()
 	})
 	tryOnUnMounted(() => {
 		chart.value?.release()
