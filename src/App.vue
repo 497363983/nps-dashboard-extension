@@ -113,6 +113,8 @@ body {
 	position: relative;
 	width: calc(100% - 340px);
 	overflow-y: auto;
+	display: flex;
+	align-items: center;
 }
 .dashboard-extension-config {
 	border-left: 1px solid #5f5f5f;
