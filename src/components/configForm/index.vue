@@ -280,6 +280,7 @@ watchEffect(() => {
 		ratingField: formValues.ratingField ?? "",
 		roleRange: formValues.roleRange ?? [1, 3],
 		showTable: showTable.value,
+		// @ts-ignore
 		scoreRange: chosenRatingField.value?.ratingRange,
 	}
 	config.value = {

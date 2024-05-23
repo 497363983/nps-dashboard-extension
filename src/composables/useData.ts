@@ -6,7 +6,7 @@ import { tryOnMounted, tryOnUnMounted } from "@/utils"
 
 export function useData<T = IData>(
 	config: MaybeRefOrGetter<IConfig | undefined>,
-	parseData: (raw: IData) => T[]
+	parseData: (raw: IData, config: IConfig | undefined) => T[]
 ) {
 	const data = shallowRef<T[]>([])
 	const state = useState()
@@ -16,7 +16,7 @@ export function useData<T = IData>(
 	}
 
 	const off = bitable.dashboard.onDataChange((ctx) => {
-		data.value = parseData(ctx.data)
+		data.value = parseData(ctx.data, toValue(config))
 	})
 
 	const getData = async () => {
@@ -27,8 +27,13 @@ export function useData<T = IData>(
 		if (!condition || !condition.tableId) return
 		if (condition.groups && !condition.groups[0]?.fieldId) return
 		console.log("condition", condition)
-		const raw = await getDataMethod(condition)
-		data.value = parseData(raw)
+		try {
+			const raw = await getDataMethod(condition)
+			data.value = parseData(raw, toValue(config))
+		} catch (e) {
+			console.error(e, condition)
+		}
+		
 	}
 	tryOnMounted(getData, false)
 	tryOnUnMounted(off)

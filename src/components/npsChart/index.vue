@@ -13,13 +13,15 @@ const props = defineProps<{
 	config?: IConfig
 }>()
 const { t } = useI18n()
-const { height: winHeight, width: winWidth } = useWindowSize()
+const { height: winHeight } = useWindowSize()
 
-const data = useData<NPSDataItem>(
+const data = useData(
 	() => props.config,
-	(raw) => {
-		const customConfig = props.config?.customConfig as CustomConfig | undefined
+	(raw, config) => {
+		if (!config) return []
+		const customConfig = config?.customConfig as CustomConfig | undefined
 		if (!customConfig) return []
+		if (!customConfig.scoreRange) return []
 		const _data: Record<NPSRole, number> = {
 			[NPSRole.Detractor]: 0,
 			[NPSRole.Passive]: 0,
@@ -122,7 +124,7 @@ const tableData = computed(() => {
 				:span="24"
 				align="center"
 			>
-				<div style="max-height: 100vh;overflow: auto;">
+				<div style="max-height: 100vh; overflow: auto">
 					<div
 						:style="{
 							// position: 'relative',

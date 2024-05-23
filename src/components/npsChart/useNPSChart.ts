@@ -208,7 +208,9 @@ export function useNPSChart(
 			if (!chart.value) return
 			chart.value.updateSpec(getSpec(data)).then(() => {
 				resize()
-				nextTick(bitable.dashboard.setRendered)
+				nextTick(() => {
+					bitable.dashboard.setRendered()
+				})
 			})
 
 		},
