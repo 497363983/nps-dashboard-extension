@@ -5,13 +5,15 @@ import { useData } from "@/composables"
 import { NPSRole, CustomConfig } from "@/types"
 import { useNPSChart, NPSDataItem } from "./useNPSChart"
 import { getRole, getInitRoleRange } from "@/utils"
-import { Table, Row, Col } from "@kousum/semi-ui-vue"
+import { Table, Row, Col, type ColumnProps } from "@kousum/semi-ui-vue"
 import { computed } from "vue"
+import { useWindowSize } from "@vueuse/core"
 
 const props = defineProps<{
 	config?: IConfig
 }>()
 const { t } = useI18n()
+const { height: winHeight, width: winWidth } = useWindowSize()
 
 const data = useData<NPSDataItem>(
 	() => props.config,
@@ -59,8 +61,10 @@ const data = useData<NPSDataItem>(
 		] as NPSDataItem[]
 	},
 )
-
-useNPSChart("#nps-chart", data)
+const { height, width } = useNPSChart("#nps-chart", data)
+const chartHeight = computed(() => {
+	return height.value / 2 + 20
+})
 
 const columns = () => {
 	return [
@@ -79,7 +83,7 @@ const columns = () => {
 			dataIndex: "Percent",
 			align: "right",
 		},
-	]
+	] as ColumnProps[]
 }
 const tableData = computed(() => {
 	const total = data.value.reduce((acc, cur) => acc + cur.num, 0)
@@ -91,9 +95,12 @@ const tableData = computed(() => {
 		: [1, 3]
 	console.log("roleRange", roleRange, "scoreRange", scoreRange)
 	const threshold = {
-		[NPSRole.Detractor]: [scoreRange?.[0], roleRange?.[0] - (scoreRange?.[0] === 1 ? 0 : 1)],
+		[NPSRole.Detractor]: [
+			scoreRange?.[0],
+			roleRange?.[0] - (scoreRange?.[0] === 1 ? 0 : 1),
+		],
 		[NPSRole.Passive]: [
-			roleRange?.[0] - - (scoreRange?.[0] === 1 ? 0 : 1),
+			roleRange?.[0] - -(scoreRange?.[0] === 1 ? 0 : 1),
 			roleRange?.[1] - scoreRange?.[0],
 		],
 		[NPSRole.Promoter]: [roleRange?.[1] - scoreRange?.[0] + 1, scoreRange?.[1]],
@@ -115,14 +122,25 @@ const tableData = computed(() => {
 				:span="24"
 				align="center"
 			>
-				<div style="min-height: 200px; max-height: 300px;position: relative;">
-					<div id="nps-chart"></div>
+				<div style="max-height: 100vh;overflow: auto;">
+					<div
+						:style="{
+							// position: 'relative',
+							height: chartHeight + 'px',
+							overflow: 'hidden',
+							// maxHeight: '100vh',
+							// transform: winWidth <= winHeight ? 'translateY(-50%)' : 'translateY(0)',
+							transform: `translateY(-${(chartHeight - (width + 40) / 2) / 2}px)`,
+						}"
+					>
+						<div id="nps-chart"></div>
+					</div>
 				</div>
 			</Col>
 			<Col
 				:span="24"
 				align="center"
-				v-if="config?.customConfig?.showTable"
+				v-if="config?.customConfig?.showTable && winHeight > 238"
 			>
 				<Table
 					:columns="columns()"
@@ -143,6 +161,7 @@ const tableData = computed(() => {
 }
 .nps-table {
 	width: 80%;
+	margin-top: 20px;
 }
 .nps-table,
 .nps-table :deep(*),

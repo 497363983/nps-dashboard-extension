@@ -52,7 +52,7 @@ const rolesList = computed(() => {
 })
 
 const sliderPadding = computed(() => {
-	return 100 / (roleValues.value.length - 1) / 2 + "%"
+	return 100 / roleValues.value.length / 2 + "%"
 })
 
 const onMouseUp = (e: MouseEvent) => {
@@ -66,48 +66,50 @@ const onMouseUp = (e: MouseEvent) => {
 </script>
 
 <template>
-	<FormSlider
-		:key="refreshKey"
-		:field="field"
-		:initValue="initRange"
-		:noLabel="true"
-		:min="1"
-		:max="max - min"
-		:marks="marks"
-		:railStyle="{
-			cursor: 'default',
-			background: 'transparent',
-		}"
-		:tipFormatter="null"
-		:showMarkLabel="false"
-		@MouseUp="onMouseUp"
-		range
-	/>
-	<div style="position: relative">
-		<div class="slider-role-container">
-			<template v-for="i in rolesList">
-				<div class="slider-role-item">
-					<roleItem
-						:role="i.role"
-						:tooltip="t(`npsRole.${i.role}`)"
-					/>
-					<span style="user-select: none; z-index: -1">
-						{{ i.value }}
-					</span>
-				</div>
-			</template>
+	<div style="margin-top: 10px;">
+		<FormSlider
+			:key="refreshKey"
+			:field="field"
+			:initValue="initRange"
+			:noLabel="true"
+			:min="1"
+			:max="max - min"
+			:marks="marks"
+			:railStyle="{
+				cursor: 'default',
+				background: 'transparent',
+			}"
+			:tipFormatter="null"
+			:showMarkLabel="false"
+			@MouseUp="onMouseUp"
+			range
+		/>
+		<div style="position: relative">
+			<div class="slider-role-container">
+				<template v-for="i in rolesList">
+					<div class="slider-role-item">
+						<roleItem
+							:role="i.role"
+							:tooltip="t(`npsRole.${i.role}`)"
+						/>
+						<span style="user-select: none; z-index: -1">
+							{{ i.value }}
+						</span>
+					</div>
+				</template>
+			</div>
 		</div>
 	</div>
 </template>
 
 <style>
 .semi-slider {
-	padding: 0 calc(13px + v-bind(sliderPadding));
+	padding: 0 calc(19px + v-bind(sliderPadding));
 }
 .semi-slider-handle {
 	border-radius: 10px;
 	width: 9px;
-	height: 16px;
+	height: 18px;
 	margin-top: 8px;
 }
 .semi-slider-track {
@@ -117,11 +119,17 @@ const onMouseUp = (e: MouseEvent) => {
 .slider-role-container {
 	display: flex;
 	justify-content: space-between;
-	transform: translateY(-150%);
+	transform: translateY(-130%);
 	position: absolute;
 	left: 0px;
 	right: 0px;
+	border-radius: 4px;
+	background-color: #DEE0E3;
 }
+body[theme-mode=dark] .slider-role-container {
+	background-color: var(--semi-color-bg-4);
+}
+
 
 .slider-values-container {
 	position: relative;
@@ -130,7 +138,7 @@ const onMouseUp = (e: MouseEvent) => {
 	display: inline-block;
 }
 .slider-role-container {
-	padding: 0 4px;
+	padding: 5px 10px;
 }
 .slider-role-item {
 	display: flex;

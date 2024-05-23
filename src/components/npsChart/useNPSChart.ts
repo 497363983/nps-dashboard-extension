@@ -1,6 +1,6 @@
 import { ICommonChartSpec } from "@visactor/vchart"
 import VChart from "@visactor/vchart"
-import { MaybeRefOrGetter, toValue, shallowRef, watch } from "vue"
+import { MaybeRefOrGetter, toValue, shallowRef, watch, ref, nextTick } from "vue"
 import { NPSRole } from "@/types"
 import { tryOnMounted, tryOnUnMounted } from "@/utils"
 import { bitable } from "@lark-base-open/js-sdk"
@@ -22,7 +22,6 @@ const npsFillColor = {
 const getNPS = (data: NPSDataItem[]) => {
 	const total = data.reduce((acc, cur) => acc + cur.num, 0)
 	const promoter = data.find((item) => item.type === NPSRole.Promoter)?.num ?? 0
-	const passive = data.find((item) => item.type === NPSRole.Passive)?.num ?? 0
 	const detractor = data.find((item) => item.type === NPSRole.Detractor)?.num ?? 0
 	const nps = ((promoter - detractor) / total) * 100
 	return nps
@@ -36,9 +35,11 @@ const getMainColor = (value: number, data: NPSDataItem[]) => {
 
 export function useNPSChart(
 	dom: string,
-	data: MaybeRefOrGetter<NPSDataItem[]>
+	data: MaybeRefOrGetter<NPSDataItem[]>,
 ) {
 	const chart = shallowRef<VChart>()
+	const height = ref(500)
+	const width = ref(500)
 	const getSpec = (_data: NPSDataItem[]) => {
 		const nps = getNPS(_data)
 		const mainColor = getMainColor(nps, _data)
@@ -55,18 +56,15 @@ export function useNPSChart(
 				}
 			],
 			autoFit: true,
+			// height: toValue(height),
 			background: "transparent",
 			startAngle: -180,
 			endAngle: 0,
-			padding: {
-				bottom: 0,
-				top: 5,
-				left: 5,
-				right: 5
-			},
+			padding: 10,
 			series: [
 				{
 					type: "gauge",
+					// regionId: "gauge",
 					valueField: "value",
 					dataIndex: 1,
 					categoryField: "role",
@@ -148,9 +146,10 @@ export function useNPSChart(
 					visible: true,
 					offsetY: '-8%',
 					title: {
+						autoFit: true,
 						style: {
 							text: String(nps.toFixed(2)),
-							fontSize: 32,
+							// fontSize: 32,
 							fontWeight: 800,
 							fill: mainColor,
 						}
@@ -182,12 +181,14 @@ export function useNPSChart(
 					inside: true,
 					tick: {
 						visible: true,
-						tickSize: 10,
+						tickSize: 5,
+						tickStep: 20,
 						style: {
 							lineWidth: 2,
 							lineCap: 'round',
 						}
 					},
+					offsetY: "59%",
 					subTick: { visible: true, tickSize: 1, style: { lineWidth: 2, lineCap: 'round' } },
 				},
 				{
@@ -204,24 +205,32 @@ export function useNPSChart(
 	watch(
 		() => toValue(data),
 		(data) => {
-			console.log(data)
 			if (!chart.value) return
-			chart.value.updateSpec(getSpec(data))
-			chart.value.renderSync()
-			bitable.dashboard.setRendered()
+			chart.value.updateSpec(getSpec(data)).then(() => {
+				resize()
+				nextTick(bitable.dashboard.setRendered)
+			})
+
 		},
 		{ immediate: true, deep: true }
 	)
+	const resize = () => {
+		if (!chart.value) return
+		const { width: w, height: h } = chart.value.getCurrentSize()
+		width.value = w
+		height.value = h
+	}
 	tryOnMounted(() => {
 		const domItem = document.querySelector(dom) as HTMLElement
 		chart.value = new VChart(getSpec(toValue(data)), {
 			dom: domItem ?? dom
 		})
 		chart.value.renderSync()
-		bitable.dashboard.setRendered()
+		resize()
+		// bitable.dashboard.setRendered()
 	})
 	tryOnUnMounted(() => {
 		chart.value?.release()
 	})
-	return chart
+	return { chart, width, height }
 }

@@ -56,7 +56,7 @@ const saveConfig = () => {
 
 <template>
 	<div
-		style="height: 100%"
+		style="height: 100vh"
 		lass="semi-light-scrollbar"
 	>
 		<LocaleProvider :locale="locale">
@@ -124,7 +124,7 @@ body {
 
 .dashboard-extension-config-form {
 	height: calc(100% - 70px);
-	padding-right: 5px;
+	padding: 0 20px;
 	overflow-y: auto;
 }
 .dashboard-extension-config-bottom {

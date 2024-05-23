@@ -228,12 +228,17 @@ const onRoleRangeChange = (value: [number, number]) => {
 
 const showTableRefreshKey = ref("showTableRefreshKey0")
 const showTable = ref(true)
+watch(
+	() => rawConfig.value?.showTable,
+	(v) => {
+		if (state.value === DashboardState.Config) {
+			showTable.value = v ?? true
+			formValues.showTable = v ?? true
+			forceRefresh(showTableRefreshKey)()
+		}
+	},
+)
 const initShowTable = computed(() => {
-	if (
-		state.value === DashboardState.Config &&
-		rawConfig.value?.showTable !== undefined
-	)
-		return rawConfig.value.showTable
 	return showTable.value
 })
 const onShowTableChange = (e: Event) => {
@@ -242,13 +247,12 @@ const onShowTableChange = (e: Event) => {
 	// @ts-ignore
 	formValues.showTable = e.target.checked
 }
-// watch(
-// 	() => showTable.value,
-// 	() => {
-// 		console.log("force update showTable")
-// 		forceRefresh(showTableRefreshKey)()
-// 	},
-// )
+watch(
+	() => showTable.value,
+	() => {
+		forceRefresh(showTableRefreshKey)()
+	},
+)
 
 const config = ref<IConfig>()
 const debouncedRefConfig = debouncedRef(config, 100)
@@ -286,7 +290,7 @@ watchEffect(() => {
 
 const onFormStateChange = (formState: FormState<RawConfig>) => {
 	const values = formState.values
-
+	console.log("values", values)
 	if (values?.dataSource) {
 		onDataSourceChange(values.dataSource)
 	}
@@ -323,8 +327,10 @@ defineExpose({
 		>
 			<template v-for="item in tableMetaList">
 				<FormSelectOption :value="item.id">
-					<tableIcon />
-					<span>{{ item.name }}</span>
+					<div class="select-option-container">
+						<tableIcon />
+						<span class="select-option-text">{{ item.name }}</span>
+					</div>
 				</FormSelectOption>
 			</template>
 		</FormSelect>
@@ -352,12 +358,14 @@ defineExpose({
 		>
 			<template v-for="item in tableDataRangeOptions">
 				<FormSelectOption :value="item.value">
-					<viewIcon
-						v-if="item.value !== SourceType.ALL"
-						:viewType="item.type"
-					/>
-					<tableIcon v-else />
-					{{ item.label }}
+					<div class="select-option-container">
+						<viewIcon
+							v-if="item.value !== SourceType.ALL"
+							:viewType="item.type"
+						/>
+						<tableIcon v-else />
+						<span class="select-option-text">{{ item.label }}</span>
+					</div>
 				</FormSelectOption>
 			</template>
 		</FormSelect>
@@ -373,8 +381,10 @@ defineExpose({
 		>
 			<template v-for="item in ratingFieldList">
 				<FormSelectOption :value="item.id">
-					<ratingFieldIcon />
-					{{ item.name }}
+					<div class="select-option-container">
+						<ratingFieldIcon />
+						<span class="select-option-text">{{ item.name }}</span>
+					</div>
 				</FormSelectOption>
 			</template>
 		</FormSelect>
@@ -396,3 +406,21 @@ defineExpose({
 		</Checkbox>
 	</Form>
 </template>
+
+<style scoped>
+.select-option-container {
+	display: flex;
+	align-items: center;
+}
+.select-option-container .select-option-text {
+	margin-left: 5px;
+}
+</style>
+<style>
+.semi-select {
+	border-color: #D0D3D6;
+}
+.semi-select:hover {
+	border-color: var(--semi-color-focus-border);
+}
+</style>
