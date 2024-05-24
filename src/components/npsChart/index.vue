@@ -102,10 +102,13 @@ const tableData = computed(() => {
 			roleRange?.[0] - (scoreRange?.[0] === 1 ? 0 : 1),
 		],
 		[NPSRole.Passive]: [
-			roleRange?.[0] - -(scoreRange?.[0] === 1 ? 0 : 1),
-			roleRange?.[1] - scoreRange?.[0],
+			roleRange?.[0] - (scoreRange?.[0] === 1 ? 0 : 1) + 1,
+			roleRange?.[1] - (scoreRange?.[0] === 1 ? 0 : 1),
 		],
-		[NPSRole.Promoter]: [roleRange?.[1] - scoreRange?.[0] + 1, scoreRange?.[1]],
+		[NPSRole.Promoter]: [
+			roleRange?.[1] - (scoreRange?.[0] === 1 ? 0 : 1) + 1,
+			scoreRange?.[1],
+		],
 	}
 	return data.value.map((item) => {
 		return {
