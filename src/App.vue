@@ -111,11 +111,11 @@ body {
 }
 body[extension-state=Config] .dashboard-extension-container,
 body[extension-state=Create] .dashboard-extension-container {
-	border-top: 1px solid #1f232985;
+	border-top: 1px solid #1f232915;
 }
 body[theme-mode=dark][extension-state=Config] .dashboard-extension-container,
 body[theme-mode=dark][extension-state=Create] .dashboard-extension-container {
-	border-top: 1px solid #cfcfcf85;
+	border-top: 1px solid #cfcfcf15;
 }
 .dashboard-extension-preview {
 	position: relative;
@@ -125,10 +125,10 @@ body[theme-mode=dark][extension-state=Create] .dashboard-extension-container {
 	align-items: center;
 }
 body[theme-mode=dark] .dashboard-extension-config {
-	border-left: 1px solid #cfcfcf85;
+	border-left: 1px solid #cfcfcf15;
 }
 .dashboard-extension-config {
-	border-left: 1px solid #1f232985;
+	border-left: 1px solid #1f232915;
 	flex: 0 340px;
 	height: 100%;
 	padding-left: 5px;
