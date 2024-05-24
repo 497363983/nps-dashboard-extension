@@ -76,9 +76,11 @@ const formValues = reactive<RawConfig>({
 	dataSource: "",
 	dataRange: SourceType.ALL,
 	ratingField: "",
-	roleRange: [1, 3],
+	// @ts-ignore
+	roleRange: undefined,
 	showTable: true,
-	scoreRange: [1, 3],
+	// @ts-ignore
+	scoreRange: undefined,
 })
 const { t } = useI18n()
 const formRef = ref<InstanceType<typeof Form>>()
@@ -211,7 +213,7 @@ const chosenRatingField = computed(() => {
 	return ratingFieldList.value.find(
 		(item) => item.id === ratingFieldValue.value,
 	)
-})
+}) 
 
 const roleRangeRefreshKey = ref("roleRangeRefreshKey0")
 const initRoleRange = computed(() => {
@@ -278,7 +280,7 @@ watchEffect(() => {
 	}
 	const customConfig: CustomConfig = {
 		ratingField: formValues.ratingField ?? "",
-		roleRange: formValues.roleRange ?? [1, 3],
+		roleRange: formValues.roleRange,
 		showTable: showTable.value,
 		// @ts-ignore
 		scoreRange: chosenRatingField.value?.ratingRange,
@@ -291,7 +293,6 @@ watchEffect(() => {
 
 const onFormStateChange = (formState: FormState<RawConfig>) => {
 	const values = formState.values
-	console.log("values", values)
 	if (values?.dataSource) {
 		onDataSourceChange(values.dataSource)
 	}

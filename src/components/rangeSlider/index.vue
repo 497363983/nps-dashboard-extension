@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { FormSlider, useFieldApi, useFormState } from "@kousum/semi-ui-vue"
 import roleItem from "./role.vue"
-import { computed, ref } from "vue"
+import { computed, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
 import { getInitRoleRange, getRole } from "@/utils"
 
@@ -42,6 +42,15 @@ const initRange = computed(() => {
 	return getInitRoleRange(num)
 })
 
+watch(
+	() => initRange.value,
+	() => {
+		fieldApi.setValue(initRange.value)
+		forceRefresh()
+	},
+	{ immediate: true },
+)
+
 const rolesList = computed(() => {
 	return roleValues.value.map((x) => {
 		return {
@@ -66,7 +75,7 @@ const onMouseUp = (e: MouseEvent) => {
 </script>
 
 <template>
-	<div style="margin-top: 10px;">
+	<div style="margin-top: 10px">
 		<FormSlider
 			:key="refreshKey"
 			:field="field"
@@ -124,12 +133,11 @@ const onMouseUp = (e: MouseEvent) => {
 	left: 0px;
 	right: 0px;
 	border-radius: 4px;
-	background-color: #DEE0E3;
+	background-color: #dee0e3;
 }
-body[theme-mode=dark] .slider-role-container {
+body[theme-mode="dark"] .slider-role-container {
 	background-color: var(--semi-color-bg-4);
 }
-
 
 .slider-values-container {
 	position: relative;

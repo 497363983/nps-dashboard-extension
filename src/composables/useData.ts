@@ -25,7 +25,6 @@ export function useData<T = IData>(
 		const condition = JSON.parse(JSON.stringify(toValue(config)?.dataConditions?.[0])) as IDataCondition
 		if (!condition || !condition.tableId) return
 		if (condition.groups && !condition.groups[0]?.fieldId) return
-		console.log("condition", condition)
 		try {
 			const raw = await getDataMethod(condition)
 			data.value = parseData(raw, toValue(config))
