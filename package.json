@@ -28,6 +28,7 @@
     "prettier": "^3.2.5",
     "typescript": "^5.4.5",
     "vite": "^5.2.11",
+    "vite-plugin-semi-theming": "^0.1.0",
     "vitest": "^1.6.0"
   },
   "scripts": {
@@ -49,5 +50,6 @@
   "bugs": {
     "url": "https://github.com/497363983/nps-dashboard-extension/issues"
   },
-  "homepage": "https://github.com/497363983/nps-dashboard-extension#readme"
+  "homepage": "https://github.com/497363983/nps-dashboard-extension#readme",
+  "output": "dist"
 }
