@@ -419,10 +419,6 @@ defineExpose({
 }
 </style>
 <style>
-.semi-select {
-	border-color: #D0D3D6;
-	border-radius: 6px;
-}
 .semi-select:hover {
 	border-color: var(--semi-color-focus-border);
 }
