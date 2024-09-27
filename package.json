@@ -1,7 +1,7 @@
 {
   "name": "nps-dashboard-extension",
   "description": "A dashboard extension of Base in FeiShu",
-  "version": "1.0.0-alpha",
+  "version": "2.0.0-alpha",
   "type": "module",
   "dependencies": {
     "@douyinfe/semi-foundation": "^2.58.0",

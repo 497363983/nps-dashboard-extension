@@ -1,7 +1,6 @@
 export * from "./useLanguage"
 export * from "./useTableList"
 export * from "./useTableMetaList"
-export * from "./useTheme"
 export * from "./useDataRange"
 export * from "./useState"
 export * from "./useConfig"

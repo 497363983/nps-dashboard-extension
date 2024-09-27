@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from "vue"
+import { computed, watch } from "vue"
 import { useDark } from "@vueuse/core"
 import {
 	ThemeModeType,
@@ -31,13 +31,20 @@ const locale = computed(() => langMap?.[lang.value] ?? langMap["en"])
 const isDark = useDark({
 	selector: "body",
 	attribute: "theme-mode",
+	initialValue: "light",
 })
 const dashboardTheme = useTheme({
-	onChanged: (theme) => {
-		isDark.value = theme.theme === ThemeModeType.DARK
-	},
 	target: dashboard,
 })
+const chartBgColor = ref("transparent")
+watch(
+	[() => dashboardTheme.value.chartBgColor, () => dashboardTheme.value.theme],
+	([_chartBgColor, _theme]) => {
+		chartBgColor.value = _chartBgColor
+		isDark.value = _theme === ThemeModeType.DARK
+	},
+	{ immediate: true },
+)
 
 const state = useState()
 const canConfigState = [DashboardState.Create, DashboardState.Config]
@@ -66,9 +73,8 @@ const saveConfig = () => {
 			<div class="dashboard-extension-container">
 				<div
 					class="dashboard-extension-preview semi-light-scrollbar"
-					:style="{ 
+					:style="{
 						width: canConfig ? 'calc(100% - 340px)' : '100%',
-						backgroundColor: dashboardTheme.chartBgColor,
 					}"
 				>
 					<npsChart :config="chartConfig" />
@@ -100,7 +106,7 @@ const saveConfig = () => {
 <style>
 body {
 	color: var(--semi-color-text-0);
-	background-color: v-bind('dashboardTheme.globalThemeBgColor');
+	background-color: transparent;
 	background: transparent;
 	background-image: none;
 }
@@ -131,6 +137,7 @@ body[theme-mode="dark"][extension-state="Create"]
 	overflow-y: auto;
 	display: flex;
 	align-items: center;
+	background-color: v-bind(chartBgColor);
 }
 body[theme-mode="dark"] .dashboard-extension-config {
 	border-left: 1px solid #cfcfcf15;

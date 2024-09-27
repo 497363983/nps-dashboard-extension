@@ -163,6 +163,7 @@ const tableData = computed(() => {
 	width: 100%;
 	width: 100%;
 	position: relative;
+	background-color: transparent;
 }
 .nps-table {
 	width: 80%;
