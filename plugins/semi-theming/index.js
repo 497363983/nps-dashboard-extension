@@ -20,7 +20,7 @@ export function semiTheming({ theme, ...options }) {
 			// https://github.com/DouyinFE/semi-design/blob/main/packages/semi-webpack/src/semi-webpack-plugin.ts#L83
 			if (/@douyinfe\/semi-(ui|icons|foundation)\/lib\/.+\.css$/.test(filePath) || /@kousum\/semi-ui-vue\/dist\/.+\.css$/.test(filePath) || /_base\/base.css$/.test(filePath)) {
 				const scssFilePath = filePath.replace(/\.css$/, '.scss');
-				const { default: sass } = await import('sass');
+				const sass = await import('sass');
 				try {
 					return sass.compileString(loader(readFileSync(scssFilePath, 'utf-8'), {
 						...options,

@@ -1,8 +1,13 @@
 <script setup lang="ts">
-import { computed, watch } from "vue"
+import { computed } from "vue"
 import { useDark } from "@vueuse/core"
-import { ThemeModeType, DashboardState } from "@lark-base-open/js-sdk"
-import { useLanguage, useTheme, useState, useConfig } from "@/composables"
+import {
+	ThemeModeType,
+	DashboardState,
+	dashboard,
+} from "@lark-base-open/js-sdk"
+import { useTheme } from "@qww0302/use-bitable"
+import { useLanguage, useState, useConfig } from "@/composables"
 import { LocaleProvider, Button } from "@kousum/semi-ui-vue"
 import configForm from "@/components/configForm/index.vue"
 import npsChart from "@/components/npsChart/index.vue"
@@ -27,14 +32,12 @@ const isDark = useDark({
 	selector: "body",
 	attribute: "theme-mode",
 })
-const theme = useTheme()
-watch(
-	theme,
-	() => {
-		isDark.value = theme.value === ThemeModeType.DARK
+const dashboardTheme = useTheme({
+	onChanged: (theme) => {
+		isDark.value = theme.theme === ThemeModeType.DARK
 	},
-	{ immediate: true },
-)
+	target: dashboard,
+})
 
 const state = useState()
 const canConfigState = [DashboardState.Create, DashboardState.Config]
@@ -63,7 +66,10 @@ const saveConfig = () => {
 			<div class="dashboard-extension-container">
 				<div
 					class="dashboard-extension-preview semi-light-scrollbar"
-					:style="{ width: canConfig ? 'calc(100% - 340px)' : '100%' }"
+					:style="{ 
+						width: canConfig ? 'calc(100% - 340px)' : '100%',
+						backgroundColor: dashboardTheme.chartBgColor,
+					}"
 				>
 					<npsChart :config="chartConfig" />
 				</div>
@@ -94,7 +100,7 @@ const saveConfig = () => {
 <style>
 body {
 	color: var(--semi-color-text-0);
-	background-color: transparent;
+	background-color: v-bind('dashboardTheme.globalThemeBgColor');
 	background: transparent;
 	background-image: none;
 }
@@ -109,12 +115,14 @@ body {
 	height: calc(100vh - 1px);
 	position: relative;
 }
-body[extension-state=Config] .dashboard-extension-container,
-body[extension-state=Create] .dashboard-extension-container {
+body[extension-state="Config"] .dashboard-extension-container,
+body[extension-state="Create"] .dashboard-extension-container {
 	border-top: 1px solid #1f232915;
 }
-body[theme-mode=dark][extension-state=Config] .dashboard-extension-container,
-body[theme-mode=dark][extension-state=Create] .dashboard-extension-container {
+body[theme-mode="dark"][extension-state="Config"]
+	.dashboard-extension-container,
+body[theme-mode="dark"][extension-state="Create"]
+	.dashboard-extension-container {
 	border-top: 1px solid #cfcfcf15;
 }
 .dashboard-extension-preview {
@@ -124,7 +132,7 @@ body[theme-mode=dark][extension-state=Create] .dashboard-extension-container {
 	display: flex;
 	align-items: center;
 }
-body[theme-mode=dark] .dashboard-extension-config {
+body[theme-mode="dark"] .dashboard-extension-config {
 	border-left: 1px solid #cfcfcf15;
 }
 .dashboard-extension-config {
