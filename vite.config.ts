@@ -7,18 +7,19 @@ import { semiTheming } from "./plugins/semi-theming"
 
 
 export default defineConfig({
-    plugins: [
+	base: './',
+	plugins: [
 		vue(),
-        semiTheming({
-            theme: "@semi-bot/semi-theme-feishu-dashboard"
-        }),
+		semiTheming({
+			theme: "@semi-bot/semi-theme-feishu-dashboard"
+		}),
 		// semiTheming({
 		// 	theme: "@semi-bot/semi-theme-feishu-dashboard"
 		// })
-    ],
+	],
 	resolve: {
 		alias: {
-		  "@": path.resolve(__dirname, "./src"),
+			"@": path.resolve(__dirname, "./src"),
 		},
-	  },
+	},
 })
